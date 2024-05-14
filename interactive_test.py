@@ -33,47 +33,46 @@ class TestBPlusTreeInteractive(unittest.TestCase):
 
     def test_interactive_simulation_default_order(self):
         tree = BPlusTree(order=4)
-        operations = [
-            ('INSERT', 10, 'Record10'),
-            ('INSERT', 20, 'Record20'),
-            ('UPDATE', 10, 15, 'Record15'),
-            ('DELETE', 20),
-            ('SHOW',)
-        ]
+        operations = [('INSERT', 10, 'Record10'), ('INSERT', 20, 'Record20'),
+                      ('UPDATE', 10, 15, 'Record15'), ('DELETE', 20), ('SHOW',)]
         self.simulate_operations(tree, operations)
 
     def test_interactive_simulation_higher_order(self):
         tree = BPlusTree(order=6)
-        operations = [
-            ('INSERT', 10, 'Record10'),
-            ('INSERT', 20, 'Record20'),
-            ('INSERT', 30, 'Record30'),
-            ('DELETE', 20),
-            ('UPDATE', 10, 15, 'NewRecord15'),
-            ('SHOW',)
-        ]
+        operations = [('INSERT', 10, 'Record10'), ('INSERT', 20, 'Record20'),
+                      ('INSERT', 30, 'Record30'), ('DELETE', 20), ('UPDATE', 10, 15, 'NewRecord15'),
+                      ('SHOW',)]
         self.simulate_operations(tree, operations)
 
     def test_interactive_simulation_with_strings(self):
         tree = BPlusTree(order=3)
-        operations = [
-            ('INSERT', 'apple', 'Fruit'),
-            ('INSERT', 'banana', 'Yellow Fruit'),
-            ('UPDATE', 'apple', 'green apple', 'Green Fruit'),
-            ('DELETE', 'banana'),
-            ('SHOW',)
-        ]
+        operations = [('INSERT', 'apple', 'Fruit'), ('INSERT', 'banana', 'Yellow Fruit'),
+                      ('UPDATE', 'apple', 'green apple', 'Green Fruit'), ('DELETE', 'banana'),
+                      ('SHOW',)]
         self.simulate_operations(tree, operations)
 
     def test_interactive_simulation_with_floats(self):
         tree = BPlusTree(order=5)
-        operations = [
-            ('INSERT', 3.14159, 'Pi'),
-            ('INSERT', 2.71828, 'Euler Number'),
-            ('UPDATE', 3.14159, 3.14, 'Pi Approx'),
-            ('DELETE', 2.71828),
-            ('SHOW',)
-        ]
+        operations = [('INSERT', 3.14159, 'Pi'), ('INSERT', 2.71828, 'Euler Number'),
+                      ('UPDATE', 3.14159, 3.14, 'Pi Approx'), ('DELETE', 2.71828), ('SHOW',)]
+        self.simulate_operations(tree, operations)
+
+    def test_interactive_simulation_with_datetimes(self):
+        tree = BPlusTree(order=4)
+        operations = [('INSERT', datetime(2022, 1, 1), 'New Year 2022'),
+                      ('INSERT', datetime(2023, 1, 1), 'New Year 2023'),
+                      ('UPDATE', datetime(2022, 1, 1), datetime(2022, 6, 1), 'Mid Year 2022'),
+                      ('DELETE', datetime(2023, 1, 1)), ('SHOW',)]
+        self.simulate_operations(tree, operations)
+
+    def test_overflow_handling(self):
+        tree = BPlusTree(order=4)
+        operations = [('INSERT', 10, 'Record10'), ('INSERT', 20, 'Record20'),
+                      ('INSERT', 5, 'Record5'), ('INSERT', 15, 'Record15'),
+                      ('INSERT', 25, 'Record25'),  # This should trigger a split
+                      ('INSERT', 30, 'Record30'), ('INSERT', 35, 'Record35'),
+                      # This should trigger another split
+                      ('SHOW',)]
         self.simulate_operations(tree, operations)
 
 if __name__ == '__main__':
